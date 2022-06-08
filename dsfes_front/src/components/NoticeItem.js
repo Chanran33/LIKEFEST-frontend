@@ -1,6 +1,5 @@
-import axios from "axios";
 import React, { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useTransition } from "react-spring";
 import styles from "../css/Notice.module.css";
 import DeleteModal from "./DeleteModal";
@@ -14,11 +13,9 @@ const NoticeItem = ({ content }) => {
   // 이미지 추가 태영언니는 신입니다.
   const [imgurl, setImgurl] = useState("");
   useEffect(() => {
-    // console.log("콘텐트 보여줘 // ", typeof content.noTitle);
     const hope = content.noImg.data;
     const img_url = [];
     for (let i = 8; i < hope.length; i++) {
-      // console.log(String.fromCharCode(hope[i]));
       img_url.push(String.fromCharCode(hope[i]));
       setImgurl("http://localhost:3001/" + img_url.join(""));
     }
@@ -43,46 +40,26 @@ const NoticeItem = ({ content }) => {
     },
   ];
 
+  // 글 더보기, 수정삭제
+  const [showMore, setShowMore] = useState(false);
+  const [showEdit, setShowEdit] = useState(false);
   // 더보기했을때 보여질 전체 텍스트 (최적화 추후에 하기)
   function FullContent({ content }) {
-    return (
+    return showMore ? (
       <div>
-        <div className={styles.ntcContent}>{content.noText}</div>
+        <div className={styles.ntcContentCut}>{content.noText}</div>
         <div className={styles.imgContainer}>
           <img className={styles.ntcimg} src={imgurl} alt="imgs" />
         </div>
       </div>
-    );
+    ) : null;
   }
   // 운영진 주소일때 보여질 컴포넌트들
   const location = useLocation();
 
-  // 글 더보기, 수정삭제
-  const [showMore, setShowMore] = useState(false);
-  const [showEdit, setShowEdit] = useState(false);
-  const [toEdit, setToEdit] = useState(false);
-
   // 점 세개 눌렀을 때
   const clickShowEdit = () => {
     setShowEdit((showEdit) => !showEdit);
-  };
-
-  // 수정하기 버튼 눌렀을 때
-  const clickEdit = () => {
-    setShowEdit(false);
-    // const id = content.id;
-    const checkedit = window.confirm("수정 확인");
-    if (checkedit) {
-      // axios
-      //   .put(`localhost:3001/notice/update/${id}`)
-      //   .then((res) => {})
-      //   .catch((error) =>
-      //     // console.log(res);
-      //     console.log("Network Error : ", error)
-      //   );
-    } else {
-      alert("수정 취소");
-    }
   };
 
   // 수정,삭제 버튼 TY
@@ -94,57 +71,64 @@ const NoticeItem = ({ content }) => {
       enter: { opacity: 1 },
       leave: { opacity: 0 },
     });
-
     return (
-      <div className={styles.btnContainer}>
-        <button className={styles.editdelete}>
-          수정하기{" "}
-          <img
-            className={styles.editdeleteicon}
-            src={icon_modify}
-            alt="editImg"
-          />
-        </button>
-        <hr id={styles.edithr} />
-        <button
-          className={styles.editdelete}
-          onClick={() => {
-            setOpenModal(true);
-          }}
-        >
-          삭제하기
-          <img
-            className={styles.editdeleteicon}
-            src={icon_delete}
-            alt="deleteImg"
-          />
-        </button>
-
-        {transitions(
-          (style, item) =>
-            item && (
-              <DeleteModal
-                content={content}
-                style={style}
-                closeModal={() => setOpenModal(false)}
+      <div>
+        <div className={styles.btnContainer}>
+          <Link
+            to="/update"
+            state={{
+              content: content,
+              imgurl: imgurl,
+            }}
+            className={styles.noCss}
+          >
+            <button className={styles.editBtn}>
+              수정하기{" "}
+              <img
+                className={styles.editdeleteicon}
+                src={icon_modify}
+                alt="editImg"
               />
-            )
-        )}
+            </button>
+          </Link>
+          <hr id={styles.edithr} />
+          <button
+            className={styles.deletebtn}
+            onClick={() => {
+              setOpenModal(true);
+            }}
+          >
+            삭제하기
+            <img
+              className={styles.editdeleteicon}
+              src={icon_delete}
+              alt="deleteImg"
+            />
+          </button>
+
+          {transitions(
+            (style, item) =>
+              item && (
+                <DeleteModal
+                  content={content}
+                  style={style}
+                  closeModal={() => setOpenModal(false)}
+                />
+              )
+          )}
+        </div>
       </div>
     );
   }
 
   // 미리 보기 글자 자르기
-
   const truncate = (str, n) => {
     return str?.length > n ? str.substr(0, n - 1) + " ..." : str;
   };
   const TagId = content.noTag - 1;
+
   return (
-    <div
-      className={styles.ntcItem}
-      // onClick={() => setShowMore(!showMore)}
-    >
+    <div className={styles.ntcItem}>
       {/* 여닫는 버튼 */}
       <button className={styles.moreBtn} onClick={() => setShowMore(!showMore)}>
         {showMore ? (
@@ -154,7 +138,7 @@ const NoticeItem = ({ content }) => {
         )}
       </button>
       {/* 해시태그 보여주기 */}
-      <div className={styles.hashtagContainer}>
+      <div className={styles.tagCon}>
         <div
           className={styles.hashtag}
           style={{ backgroundColor: myTag[TagId].bgColor }}

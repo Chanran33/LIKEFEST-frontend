@@ -11,6 +11,7 @@ import step2 from "../img/find_duksae/image_step2.png";
 import step3 from "../img/find_duksae/image_step3.png";
 import step4 from "../img/find_duksae/image_step4.png";
 import step5 from "../img/find_duksae/image_step5.png";
+import icon from "../img/find_duksae/tool_tip_icon.png";
 import FailModal from "../components/FailModal";
 import { useTransition } from "react-spring";
 
@@ -34,16 +35,13 @@ const Event = () => {
     if (name === "userinput") {
       setUserinput(value);
     }
-      // 모달 닫을 때 쓰는 handle 함수에 추가해 주면 스크롤 방지 해제
-      // 따라서 사용자가 input 박스 클릭시 스크롤 가능
-      document.body.style.overflow = "unset";
   }, []);
 
   const [choose, setChoose] = useState(false);
 
   // 총학에서 정답을 받으면 아래 answer에 대입할 것
   const checkAnswer = () => {
-    const answer = "멋쟁이 사자처럼";
+    const answer = "두려움 없는 여성들에게서 불꽃이 타오른다.";
 
     if (answer === userinput) {
       console.log("정답이지롱");
@@ -66,8 +64,15 @@ const Event = () => {
           className={styles.eventinput}
           type="text"
           placeholder=" 정답을 입력해주세요"
-          // onkeyup="enterkey();" enter클릭시 버튼 눌리는 효과를 내고 싶다
         />
+        {/* input창의 tooltip */}
+        <div className={styles.tooltip}>
+          <div className={styles.slideIn}>
+            <img className={styles.info} src={icon} alt="힌트" />
+            <p className={styles.hintcontent}><span>Hint</span> | OOO OO OOOOOO OOO OOOO.</p>
+          </div>
+        </div>
+
         <button
           className={styles.button}
           type="submit"
@@ -79,6 +84,7 @@ const Event = () => {
           확인하기
         </button>
       </div>
+        
 
       <div className={styles.bottombox}>
         {/* 참여 방법 */}

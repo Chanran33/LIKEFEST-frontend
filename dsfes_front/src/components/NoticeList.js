@@ -10,16 +10,17 @@ const NoticeList = () => {
       .get("http://localhost:3001/notice")
       .then((res) => {
         setContents(res.data);
-        console.log(contents);
       })
       .catch((error) => console.log("Network Error : ", error));
   }, []);
 
   return (
     <div>
-      {contents.reverse().map((content) => (
-        <NoticeItem content={content} key={content.id} />
-      ))}
+      <div>
+        {contents.reverse().map((content) => (
+          <NoticeItem content={content} key={content.id} />
+        ))}
+      </div>
     </div>
   );
 };
