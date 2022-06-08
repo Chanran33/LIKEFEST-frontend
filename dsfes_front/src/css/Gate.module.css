@@ -48,9 +48,10 @@
 
 .keywordDiv{
     position: relative;
-    width: 412px;
+    
     height: 268px;
-    margin: 0px auto;
+    margin-left: 27.79px;
+    margin-right: 21.59px;
     margin-bottom: 29px;
 }
 .keywordDiv img{

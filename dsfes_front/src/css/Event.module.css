@@ -3,7 +3,7 @@
 
 @media (min-width: 768px) {
   .wrap {
-    width: 344px;
+    /* width: 344px; */
     margin: 0 auto;
     /*background-color: #f6f5f1;*/
   }
